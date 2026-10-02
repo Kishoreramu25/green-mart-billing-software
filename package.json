@@ -1,0 +1,43 @@
+{
+  "name": "billing-pos",
+  "version": "1.0.0",
+  "description": "Offline Billing & POS",
+  "main": "main.js",
+  "scripts": {
+    "start": "electron .",
+    "web": "node server.js",
+    "dist": "electron-builder --win nsis"
+  },
+  "devDependencies": {
+    "electron": "^33.0.0",
+    "electron-builder": "^25.1.8"
+  },
+  "build": {
+    "appId": "com.local.billingpos",
+    "productName": "Billing POS",
+    "files": [
+      "main.js",
+      "preload.js",
+      "server.js",
+      "db.js",
+      "supabaseDb.js",
+      ".env",
+      "renderer/**/*",
+      "node_modules/sql.js/**/*",
+      "node_modules/@supabase/**/*",
+      "node_modules/dotenv/**/*"
+    ],
+    "win": {
+      "target": "nsis"
+    },
+    "nsis": {
+      "oneClick": false,
+      "allowToChangeInstallationDirectory": true
+    }
+  },
+  "dependencies": {
+    "@supabase/supabase-js": "^2.117.2",
+    "dotenv": "^18.0.5",
+    "sql.js": "^1.14.2"
+  }
+}

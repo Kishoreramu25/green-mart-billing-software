@@ -1,0 +1,290 @@
+<!DOCTYPE html>
+<html lang="en"><head><meta charset="utf-8"><title>Billing & POS</title>
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<style>
+:root{color-scheme:light;--g:#15803d;--gd:#0f5c2b;--gl:#e8f5ec;--g2:#f4faf6;--ln:#d7e6dc;--tx:#14261b;--mu:#5c7466;--rd:#b42318;--bg:#fff;box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}
+*{box-sizing:border-box}html{scroll-padding-top:env(safe-area-inset-top,0px)}
+body{margin:0;background:var(--bg);color:var(--tx);font:15px/1.45 "Segoe UI",system-ui,sans-serif}
+header{background:var(--g);color:#fff;padding:12px 18px;display:flex;align-items:center;gap:14px;flex-wrap:wrap}
+header h1{font:700 22px Fraunces,Georgia,serif;margin:0;flex:1}
+nav{display:flex;gap:4px;overflow-x:auto;padding:8px 12px;background:var(--g2);border-bottom:1px solid var(--ln)}
+nav button{border:0;background:none;padding:8px 14px;border-radius:8px;font:500 14px Figtree;color:var(--mu);cursor:pointer;white-space:nowrap}
+nav button.on{background:var(--g);color:#fff}
+main{padding:16px;max-width:1150px;margin:auto}
+h2{font:700 20px Fraunces,serif;margin:0 0 12px}h3{margin:18px 0 8px;font-size:16px}
+.grid{display:grid;gap:12px;grid-template-columns:repeat(auto-fit,minmax(150px,1fr))}
+.card{border:1px solid var(--ln);border-radius:10px;padding:14px;background:#fff}
+.card small{color:var(--mu)}.card b{display:block;font:700 24px Fraunces,serif;color:var(--gd)}
+.two{display:grid;gap:16px;grid-template-columns:repeat(auto-fit,minmax(300px,1fr))}
+.tw{overflow-x:auto}table{width:100%;border-collapse:collapse}
+th,td{text-align:left;padding:8px 10px;border-bottom:1px solid var(--ln);font-size:14px;white-space:nowrap}
+th{background:var(--g2);color:var(--gd);font-weight:700}td.n,th.n{text-align:right;font-variant-numeric:tabular-nums}
+input,select,textarea{font:inherit;padding:8px 10px;border:1px solid var(--ln);border-radius:8px;background:#fff;color:var(--tx);max-width:100%}
+input:focus,select:focus,button:focus-visible,textarea:focus{outline:2px solid var(--g);outline-offset:1px}
+.btn{background:var(--g);color:#fff;border:0;padding:9px 16px;border-radius:8px;font:700 14px Figtree;cursor:pointer}
+.btn:hover{background:var(--gd)}.btn.o{background:#fff;color:var(--g);border:1px solid var(--g)}.btn.r{background:#fff;color:var(--rd);border:1px solid var(--rd)}
+.row{display:flex;gap:8px;flex-wrap:wrap;align-items:center;margin-bottom:10px}
+.low{color:var(--rd);font-weight:700}.tag{background:var(--gl);color:var(--gd);padding:2px 8px;border-radius:99px;font-size:12px}
+.bar{display:flex;align-items:flex-end;gap:8px;height:130px}.bar div{flex:1;text-align:center;font-size:11px;color:var(--mu)}
+.bar i{display:block;background:var(--g);border-radius:4px 4px 0 0;margin-bottom:4px;min-height:2px}
+.tot{font:700 26px Fraunces,serif;color:var(--gd)}
+.lbl{display:grid;gap:8px;grid-template-columns:repeat(auto-fit,minmax(140px,1fr))}.lbl label{font-size:12px;color:var(--mu);display:grid;gap:3px}
+.db-sharp, .db-sharp * {border-radius:0 !important;box-shadow:none !important}
+.db-sharp{font-family:Consolas,"Courier New",monospace}
+.db-sharp .card{border:1px solid #cbd5e1 !important;background:#fff;padding:0 !important}
+.db-sharp .btn{border-radius:0 !important;font-weight:700;text-transform:uppercase;letter-spacing:0.5px;font-size:11px;font-family:Consolas,monospace;padding:6px 12px}
+.db-sharp input,.db-sharp select{border-radius:0 !important;border:1px solid #94a3b8 !important;font-family:Consolas,monospace;font-size:12px}
+.db-sharp table{border:1px solid #cbd5e1 !important;border-collapse:collapse !important;width:100%;font-size:12px}
+.db-sharp th{background:#f8fafc !important;color:#0f172a !important;border:1px solid #cbd5e1 !important;font-family:Consolas,"Courier New",monospace;padding:7px 10px;vertical-align:bottom}
+.db-sharp th .th-name{font-weight:700;font-size:11px;color:#0f172a;letter-spacing:0.5px}
+.db-sharp th .th-type{font-weight:400;font-size:10px;color:#64748b;text-transform:lowercase;margin-top:2px}
+.db-sharp td{border:1px solid #e2e8f0 !important;font-size:12px;padding:6px 10px;font-family:Consolas,"Courier New",monospace;color:#1e293b}
+.db-sharp td.row-num{width:36px;text-align:center;color:#94a3b8;background:#f8fafc;user-select:none;font-size:11px;border-right:1px solid #cbd5e1 !important}
+.db-sharp tr:nth-child(even) td:not(.row-num){background:#fcfdfe}
+.db-sharp tr:hover td{background:#f1f5f9 !important}
+.db-sharp td code{font-family:Consolas,monospace;background:#f1f5f9;padding:2px 4px;border:1px solid #cbd5e1;font-size:11px;color:#0f172a}
+.db-sharp .tag{border-radius:0 !important;font-size:10px;text-transform:uppercase;font-weight:700;letter-spacing:0.5px;font-family:Consolas,monospace;padding:2px 6px}
+.db-sharp .db-toolbar{border:1px solid #334155 !important;background:#0f172a !important;color:#f8fafc !important;padding:10px 14px;display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:10px;margin-bottom:0}
+.db-sharp .db-tab-bar{display:flex;flex-wrap:wrap;gap:0;border:1px solid #cbd5e1;border-bottom:none;background:#f1f5f9;margin-top:10px}
+.db-sharp .db-tab-btn{border:none;border-right:1px solid #cbd5e1;border-bottom:2px solid transparent;background:transparent;padding:8px 12px;font-family:Consolas,monospace;font-size:11px;font-weight:600;color:#475569;cursor:pointer;display:flex;align-items:center;gap:6px}
+.db-sharp .db-tab-btn:hover{background:#e2e8f0;color:#0f172a}
+.db-sharp .db-tab-btn.active{background:#fff;border-bottom:2px solid #0f172a;color:#0f172a;font-weight:700}
+.db-sharp .db-tab-count{background:#e2e8f0;color:#475569;padding:1px 5px;font-size:10px;font-weight:600}
+.db-sharp .db-tab-btn.active .db-tab-count{background:#0f172a;color:#fff}
+.db-sharp .db-filter-bar{display:flex;align-items:center;background:#fff;border:1px solid #cbd5e1;border-bottom:none;padding:6px 10px;gap:8px}
+.db-sharp .db-statusbar{display:flex;justify-content:space-between;align-items:center;background:#f8fafc;border:1px solid #cbd5e1;border-top:none;padding:6px 12px;font-family:Consolas,monospace;font-size:11px;color:#64748b}
+#rc{display:none}
+@media print{body>*:not(#rc){display:none!important}#rc{display:block;font:12px/1.35 "Courier New",monospace;color:#000;white-space:pre;padding:0;margin:0}@page{margin:2mm}}
+</style></head><body>
+<header><h1>Billing & POS</h1><div style="display:flex;align-items:center;gap:10px"><span id="db-badge" class="tag" style="background:rgba(255,255,255,0.2);color:#fff;font-size:12px;font-weight:600"></span><span id="sh"></span></div></header>
+<nav id="nav"></nav><main id="app"></main><div id="rc"></div>
+<script>
+const K='billing_pos_v1',$=s=>document.querySelector(s),R=n=>'₹'+(+n||0).toLocaleString('en-IN',{maximumFractionDigits:2});
+const seed=()=>({set:{shop:'Green Mart',addr:'Main Road, Your City',phone:'98xxxxxx00',gstin:'',pre:'INV-',w:58,auto:true},
+prods:[
+{id:1,name:'Basmati Rice 1kg',code:'P001',bc:'8901001',cat:'Grocery',unit:'pkt',pp:90,sp:110,mrp:120,gst:5,stock:60,min:15,box:10},
+{id:2,name:'Sunflower Oil 1L',code:'P002',bc:'8901002',cat:'Grocery',unit:'btl',pp:120,sp:145,mrp:155,gst:5,stock:8,min:12},
+{id:3,name:'Toor Dal 1kg',code:'P003',bc:'8901003',cat:'Grocery',unit:'pkt',pp:110,sp:135,mrp:140,gst:5,stock:40,min:10},
+{id:4,name:'Green Tea 25 bags',code:'P004',bc:'8901004',cat:'Beverage',unit:'box',pp:70,sp:95,mrp:105,gst:12,stock:25,min:8,box:12},
+{id:5,name:'Hand Soap',code:'P005',bc:'8901005',cat:'Personal',unit:'pc',pp:25,sp:38,mrp:40,gst:18,stock:90,min:20,box:12}],
+custs:[{id:1,name:'Walk-in',mobile:'',bal:0}],bills:[],purch:[],exp:[],audit:[],mv:[],close:{}});
+if(!window.store){const _x=(u,m='GET',d=null)=>{try{const x=new XMLHttpRequest();x.open(m,u,false);if(d)x.setRequestHeader('Content-Type','application/json');x.send(d);if(x.status>=200&&x.status<300)return x.responseText}catch(e){}return null};window.store={load:()=>{const r=_x('/api/load');if(r){try{localStorage.setItem(K,r)}catch(e){}return r}return localStorage.getItem(K)},save:j=>{try{localStorage.setItem(K,j)}catch(e){}_x('/api/save','POST',j);return true},backup:(d,j)=>{try{localStorage.setItem(K+'_bk_'+d,j)}catch(e){}_x('/api/backup','POST',JSON.stringify({date:d,data:j}));return true},list:()=>{const r=_x('/api/list');if(r)try{return JSON.parse(r)}catch(e){}return Object.keys(localStorage).filter(k=>k.startsWith(K+'_bk_')).map(k=>k.slice((K+'_bk_').length)).sort().reverse()},read:d=>{const r=_x('/api/read?date='+encodeURIComponent(d));if(r)return r;return localStorage.getItem(K+'_bk_'+d)},print:()=>{window.print();return true},path:'SQLite Database (Connected)'}}
+let D;try{D=JSON.parse(window.store.load())||seed()}catch(e){D=seed()}
+D.close=D.close||{};
+const today=()=>new Date().toLocaleDateString('en-CA'),BK='';
+const bkList=()=>{try{return window.store.list()}catch(e){return[]}};
+function autoBackup(){if(D.set.autobk===false)return;try{window.store.backup(today(),JSON.stringify(D))}catch(e){}}
+const save=()=>{try{window.store.save(JSON.stringify(D))}catch(e){}autoBackup()};
+let cday=today(),CL={},dip;
+addEventListener('beforeinstallprompt',e=>{e.preventDefault();dip=e});
+function installApp(){if(dip){dip.prompt();dip=null}else alert('Open your browser menu and choose "Install app" or "Add to Home screen".')}
+let tab='Dashboard',cart=[],disc=0,cust=1,held=[],rng='week',q='';
+const tabs=['Dashboard','Billing','Products','Purchases','Inventory','Customers','Reports','Closing','Settings','Database'];
+const log=(a,d)=>{D.audit.unshift({t:new Date().toISOString(),a,d});D.audit=D.audit.slice(0,200)};
+const mv=(pid,qty,why)=>{D.mv.unshift({t:new Date().toISOString(),pid,qty,why});D.mv=D.mv.slice(0,300)};
+const P=id=>D.prods.find(p=>p.id==id),mult=l=>l.u=='box'?(P(l.id).box||1):1;
+function nav(){$('#nav').innerHTML=tabs.map(t=>`<button class="${t==tab?'on':''}" onclick="tab='${t}';go()">${t}</button>`).join('');$('#sh').textContent=D.set.shop}
+addEventListener('online',nav);addEventListener('offline',nav)
+function go(){nav();$('#app').innerHTML=V[tab]();if(tab=='Billing')calc();if(tab=='Reports')bl();if(tab=='Closing')clc();if(tab=='Database')renderDbTable()}
+const dstart=k=>{const d=new Date();d.setHours(0,0,0,0);if(k=='today')return d;if(k=='week'||k=='last'){const w=new Date(d);w.setDate(d.getDate()-((d.getDay()+6)%7));if(k=='last')w.setDate(w.getDate()-7);return w}if(k=='month'){d.setDate(1)}return d};
+const inR=(b,k)=>{const t=new Date(b.t),s=dstart(k);if(k=='last')return t>=s&&t<dstart('week');return t>=s};
+const live=()=>D.bills.filter(b=>!b.ret);
+const sum=(a,f)=>a.reduce((x,y)=>x+f(y),0);
+function topP(k,by){const m={};live().filter(b=>inR(b,k)).forEach(b=>b.items.forEach(i=>{m[i.name]=m[i.name]||{q:0,v:0};m[i.name].q+=i.qty*(i.mult||1);m[i.name].v+=i.qty*i.price}));return Object.entries(m).sort((a,b)=>b[1][by]-a[1][by]).slice(0,5)}
+function reorder(){const c=new Date();c.setDate(c.getDate()-30);return D.prods.map(p=>{const sold=sum(live().filter(b=>new Date(b.t)>=c),b=>sum(b.items.filter(i=>i.id==p.id),i=>i.qty*(i.mult||1))),d=sold/30,need=Math.ceil(Math.max(p.min*2,d*14))-p.stock;return{p,d,need,cost:need*p.pp}}).filter(r=>r.p.stock<=r.p.min&&r.need>0)}
+const V={
+Dashboard(){const L=live(),td=L.filter(b=>inR(b,'today')),wk=L.filter(b=>inR(b,'week')),mo=L.filter(b=>inR(b,'month'));
+const pay=m=>sum(L,b=>b.pay[m]||0),low=D.prods.filter(p=>p.stock<=p.min);
+const days=[...Array(7)].map((_,i)=>{const d=new Date();d.setDate(d.getDate()-6+i);d.setHours(0,0,0,0);const e=new Date(d);e.setDate(e.getDate()+1);return[d.toLocaleDateString('en-IN',{weekday:'short'}),sum(L.filter(b=>{const t=new Date(b.t);return t>=d&&t<e}),b=>b.total)]});const mx=Math.max(1,...days.map(d=>d[1]));
+const tl=(k,by)=>topP(k,by).map(([n,v],i)=>`<tr><td>${i+1}. ${n}</td><td class="n">${by=='q'?v.q+' units':R(v.v)}</td></tr>`).join('')||'<tr><td>No sales yet</td></tr>';
+return`<h2>Dashboard</h2><div class="grid">
+<div class="card"><small>Today's sales</small><b>${R(sum(td,b=>b.total))}</b></div>
+<div class="card"><small>This week</small><b>${R(sum(wk,b=>b.total))}</b></div>
+<div class="card"><small>This month</small><b>${R(sum(mo,b=>b.total))}</b></div>
+<div class="card"><small>Total bills</small><b>${L.length}</b></div>
+<div class="card"><small>Cash</small><b>${R(pay('cash'))}</b></div>
+<div class="card"><small>UPI</small><b>${R(pay('upi'))}</b></div>
+<div class="card"><small>Card</small><b>${R(pay('card'))}</b></div>
+<div class="card"><small>Credit (pending)</small><b>${R(pay('credit'))}</b></div></div>
+<div class="two"><div><h3>Sales, last 7 days</h3><div class="card"><div class="bar">${days.map(d=>`<div><i style="height:${d[1]/mx*100}px"></i>${d[0]}</div>`).join('')}</div></div></div>
+<div><h3>Low stock: reorder suggestions</h3><div class="card tw"><table>${reorder().map(r=>`<tr><td>${r.p.name}</td><td class="n low">${r.p.stock} left</td><td class="n">order ${r.need}</td></tr>`).join('')||'<tr><td>All stocked</td></tr>'}</table></div></div></div>
+<div class="row" style="margin-top:18px"><h3 style="margin:0;flex:1">Most sold products</h3><select onchange="rng=this.value;go()">${[['week','This week'],['last','Last week'],['month','This month']].map(([v,t])=>`<option value="${v}" ${rng==v?'selected':''}>${t}</option>`).join('')}</select></div>
+<div class="two"><div class="card tw"><b style="font-size:14px">By quantity</b><table>${tl(rng,'q')}</table></div><div class="card tw"><b style="font-size:14px">By revenue</b><table>${tl(rng,'v')}</table></div></div>
+<h3>Recent transactions</h3><div class="card tw"><table><tr><th>Bill</th><th>Time</th><th class="n">Total</th></tr>${D.bills.slice(0,6).map(b=>`<tr><td>${b.no}${b.ret?' <span class="tag">returned</span>':''}</td><td>${new Date(b.t).toLocaleString('en-IN')}</td><td class="n">${R(b.total)}</td></tr>`).join('')||'<tr><td>No bills yet</td></tr>'}</table></div>`},
+Billing(){return`<h2>New bill</h2><div class="two"><div>
+<div class="row"><input id="sq" placeholder="Scan barcode or search product" style="flex:1" oninput="sugg()" onkeydown="if(event.key=='Enter')addQ()" autofocus></div>
+<div id="sg" class="card tw" style="margin-bottom:10px;display:none"></div>
+<div class="card tw"><table id="ct"></table></div></div>
+<div class="card"><div class="lbl"><label>Customer<select id="cu" onchange="cust=+this.value">${D.custs.map(c=>`<option value="${c.id}" ${c.id==cust?'selected':''}>${c.name}</option>`).join('')}</select></label>
+<label>Discount ₹<input id="ds" type="number" min="0" value="${disc}" oninput="disc=+this.value||0;calc()"></label></div>
+<div id="sm" style="margin:12px 0"></div>
+<div class="lbl"><label>Cash<input id="p_cash" type="number" min="0" oninput="calc()"></label><label>UPI<input id="p_upi" type="number" min="0" oninput="calc()"></label>
+<label>Card<input id="p_card" type="number" min="0" oninput="calc()"></label><label>Credit (customer balance)<input id="p_credit" type="number" min="0" oninput="calc()"></label></div>
+<div id="pm" style="margin:10px 0;color:var(--mu)"></div>
+<div class="row"><button class="btn" onclick="pay()">Save & print</button><button class="btn o" onclick="held.push({cart,disc,cust});cart=[];disc=0;go()">Hold</button>
+<button class="btn o" onclick="if(held.length){({cart,disc,cust}=held.pop());go()}">Resume (${held.length})</button><button class="btn r" onclick="cart=[];disc=0;go()">Cancel</button></div></div></div>`},
+Products(){return`<h2>Products</h2><div class="card" style="margin-bottom:14px"><div class="lbl">
+${[['name','Name'],['code','Code'],['bc','Barcode'],['cat','Category'],['unit','Unit'],['pp','Purchase price'],['sp','Selling price'],['mrp','MRP'],['gst','GST %'],['stock','Opening stock'],['min','Minimum stock'],['box','Pieces per box (optional)']].map(([k,t])=>`<label>${t}<input id="n_${k}"></label>`).join('')}</div>
+<div class="row" style="margin:10px 0 0"><button class="btn" onclick="addProd()">Add product</button></div></div>
+<div class="row"><input placeholder="Search products" value="${q}" oninput="q=this.value;go();this.focus()"></div>
+<div class="card tw"><table><tr><th>Name</th><th>Barcode</th><th>Category</th><th class="n">Price</th><th class="n">MRP</th><th class="n">GST</th><th class="n">Stock</th><th></th></tr>
+${D.prods.filter(p=>(p.name+p.bc+p.code+p.cat).toLowerCase().includes(q.toLowerCase())).map(p=>`<tr><td>${p.name}</td><td>${p.bc}</td><td>${p.cat}</td><td class="n">${R(p.sp)}</td><td class="n">${R(p.mrp)}</td><td class="n">${p.gst}%</td><td class="n ${p.stock<=p.min?'low':''}">${p.stock}${p.box?` <small>(${Math.floor(p.stock/p.box)} box)</small>`:''}</td><td><button class="btn r" onclick="delProd(${p.id})">Delete</button></td></tr>`).join('')}</table></div>`},
+Purchases(){return`<h2>Purchases</h2><div class="card" style="margin-bottom:14px"><div class="lbl">
+<label>Supplier<input id="u_s"></label><label>Invoice no.<input id="u_i"></label>
+<label>Product<select id="u_p">${D.prods.map(p=>`<option value="${p.id}">${p.name}</option>`).join('')}</select></label>
+<label>Quantity<input id="u_q" type="number" min="1"></label><label>Unit<select id="u_u"><option value="1">Piece</option><option value="box">Box</option></select></label><label>Price per piece<input id="u_pr" type="number" min="0"></label>
+<label>Status<select id="u_st"><option>Paid</option><option>Pending</option></select></label></div>
+<div class="row" style="margin:10px 0 0"><button class="btn" onclick="addPur()">Save purchase & add stock</button></div></div>
+<div class="card tw"><table><tr><th>Date</th><th>Supplier</th><th>Invoice</th><th>Product</th><th class="n">Qty</th><th class="n">Total</th><th>Status</th></tr>
+${D.purch.map(x=>`<tr><td>${new Date(x.t).toLocaleDateString('en-IN')}</td><td>${x.s}</td><td>${x.i}</td><td>${x.n}</td><td class="n">${x.q}</td><td class="n">${R(x.tot)}</td><td>${x.st}</td></tr>`).join('')||'<tr><td>No purchases yet</td></tr>'}</table></div>`},
+Inventory(){return`<h2>Inventory</h2><div class="grid" style="margin-bottom:14px"><div class="card"><small>Stock value (at cost)</small><b>${R(sum(D.prods,p=>p.stock*p.pp))}</b></div><div class="card"><small>Items low</small><b>${D.prods.filter(p=>p.stock<=p.min).length}</b></div></div>
+<div class="card tw"><table><tr><th>Product</th><th class="n">Stock</th><th class="n">Min</th><th class="n">Value</th><th>Adjust</th></tr>
+${D.prods.map(p=>`<tr><td>${p.name}</td><td class="n ${p.stock<=p.min?'low':''}">${p.stock}</td><td class="n">${p.min}</td><td class="n">${R(p.stock*p.pp)}</td><td><input id="a${p.id}" type="number" style="width:80px" placeholder="±qty"> <button class="btn o" onclick="adj(${p.id})">Apply</button></td></tr>`).join('')}</table></div>
+<h3>Reorder suggestions</h3><div class="card tw"><table><tr><th>Product</th><th class="n">Stock</th><th class="n">Sold/day (30d)</th><th class="n">Order qty</th><th class="n">Est. cost</th></tr>${reorder().map(r=>`<tr><td>${r.p.name}</td><td class="n low">${r.p.stock}</td><td class="n">${r.d.toFixed(1)}</td><td class="n"><b>${r.need}</b>${r.p.box?` (${Math.ceil(r.need/r.p.box)} box)`:''}</td><td class="n">${R(r.cost)}</td></tr>`).join('')||'<tr><td>Nothing to reorder</td></tr>'}</table></div><h3>Stock movement</h3><div class="card tw"><table>${D.mv.slice(0,15).map(m=>`<tr><td>${new Date(m.t).toLocaleString('en-IN')}</td><td>${P(m.pid)?.name||'—'}</td><td class="n">${m.qty>0?'+':''}${m.qty}</td><td>${m.why}</td></tr>`).join('')||'<tr><td>No movement yet</td></tr>'}</table></div>`},
+Customers(){return`<h2>Customers</h2><div class="row"><input id="c_n" placeholder="Name"><input id="c_m" placeholder="Mobile"><button class="btn" onclick="addCust()">Add customer</button></div>
+<div class="card tw"><table><tr><th>Name</th><th>Mobile</th><th class="n">Bills</th><th class="n">Outstanding</th><th></th></tr>${D.custs.map(c=>`<tr><td>${c.name}</td><td>${c.mobile}</td><td class="n">${live().filter(b=>b.cust==c.id).length}</td><td class="n">${R(c.bal)}</td><td>${c.bal>0?`<button class="btn o" onclick="settle(${c.id})">Receive payment</button>`:''}</td></tr>`).join('')}</table></div>`},
+Reports(){const L=live(),rev=sum(L,b=>b.total),cogs=sum(L,b=>sum(b.items,i=>i.qty*(i.mult||1)*(P(i.id)?.pp||0))),ex=sum(D.exp,e=>e.amt),gst=sum(L,b=>b.gst);
+return`<h2>Reports</h2><div class="grid"><div class="card"><small>Revenue</small><b>${R(rev)}</b></div><div class="card"><small>Gross profit</small><b>${R(rev-gst-cogs)}</b></div><div class="card"><small>Expenses</small><b>${R(ex)}</b></div><div class="card"><small>Net profit estimate</small><b>${R(rev-gst-cogs-ex)}</b></div><div class="card"><small>GST collected</small><b>${R(gst)}</b></div></div>
+<h3>Expenses</h3><div class="row"><select id="e_c"><option>Rent</option><option>Electricity</option><option>Transport</option><option>Salary</option><option>Maintenance</option><option>Other</option></select><input id="e_a" type="number" min="0" placeholder="Amount"><button class="btn" onclick="addExp()">Add expense</button></div>
+<div class="card tw"><table>${D.exp.slice(0,6).map(e=>`<tr><td>${new Date(e.t).toLocaleDateString('en-IN')}</td><td>${e.cat}</td><td class="n">${R(e.amt)}</td></tr>`).join('')||'<tr><td>No expenses yet</td></tr>'}</table></div>
+<h3>All bills</h3><div class="row"><input placeholder="Search invoice number" oninput="q=this.value;bl()"></div><div class="card tw" id="bl"></div>
+<h3>Audit log</h3><div class="card tw"><table>${D.audit.slice(0,10).map(a=>`<tr><td>${new Date(a.t).toLocaleString('en-IN')}</td><td>${a.a}</td><td>${a.d}</td></tr>`).join('')||'<tr><td>Nothing logged yet</td></tr>'}</table></div>`},
+Closing(){const f=t=>new Date(t).toLocaleDateString('en-CA'),bs=D.bills.filter(b=>f(b.t)==cday),rf=D.bills.filter(b=>b.retT&&f(b.retT)==cday),m=k=>sum(bs,b=>b.pay[k]||0),c=D.close[cday]||{};
+CL={n:bs.length,sales:sum(bs,b=>b.total),ref:sum(rf,b=>b.total),cash:m('cash'),upi:m('upi'),card:m('card'),credit:m('credit'),cr:sum(rf,b=>b.pay.cash||0),xp:sum(D.exp.filter(e=>f(e.t)==cday),e=>e.amt)};
+return`<h2>Daily closing</h2><div class="row"><input type="date" id="cdate" value="${cday}" onchange="cday=this.value;go()"></div>
+<div class="grid">${[['Bills',CL.n],['Sales',R(CL.sales)],['Refunds',R(CL.ref)],['Cash',R(CL.cash)],['UPI',R(CL.upi)],['Card',R(CL.card)],['Credit',R(CL.credit)],['Expenses',R(CL.xp)]].map(([a,b])=>`<div class="card"><small>${a}</small><b>${b}</b></div>`).join('')}</div>
+<h3>Cash count</h3><div class="card"><div class="lbl"><label>Opening cash ₹<input id="c_o" type="number" min="0" value="${c.open??''}" oninput="clc()"></label><label>Counted cash in drawer ₹<input id="c_c" type="number" min="0" value="${c.cnt??''}" oninput="clc()"></label></div>
+<div id="cl" style="margin:12px 0"></div><div class="row"><button class="btn" onclick="saveClose()">Save closing</button><button class="btn o" onclick="printClose()">Print report</button></div></div>`},
+Settings(){const s=D.set;return`<h2>Settings</h2><div class="card"><div class="lbl">
+${[['shop','Shop name'],['addr','Address'],['phone','Phone'],['gstin','GSTIN'],['pre','Invoice prefix']].map(([k,t])=>`<label>${t}<input id="s_${k}" value="${s[k]}"></label>`).join('')}
+<label>Thermal paper<select id="s_w"><option value="58" ${s.w==58?'selected':''}>58 mm</option><option value="80" ${s.w==80?'selected':''}>80 mm</option></select></label>
+<label>Automatic daily backup<select id="s_ab"><option value="1" ${s.autobk!==false?'selected':''}>On</option><option value="0" ${s.autobk===false?'selected':''}>Off</option></select></label>
+<label>Auto-print after save<select id="s_auto"><option value="1" ${s.auto?'selected':''}>Yes</option><option value="0" ${!s.auto?'selected':''}>No</option></select></label></div>
+<div class="row" style="margin-top:12px"><button class="btn" onclick="saveSet()">Save settings</button><button class="btn o" onclick="rcpt(testBill())">Test print</button></div></div>
+<h3>Cloud Database (Supabase)</h3>
+<div class="card">
+<p style="margin:0 0 10px;color:var(--mu);font-size:13px">Connect your Supabase project to store and sync your billing, stock, and customer data in PostgreSQL cloud. All data is fetched in frontend exactly as in database.</p>
+<div class="lbl">
+<label>Supabase Project URL<input id="sb_url" placeholder="https://xyzcompany.supabase.co"></label>
+<label>Supabase Anon Key<input id="sb_key" type="password" placeholder="eyJhbGciOi..."></label>
+</div>
+<div class="row" style="margin-top:10px">
+<button class="btn" onclick="saveSupabase()">Connect Supabase</button>
+</div>
+</div>
+<h3>Data location</h3><div class="card"><p style="margin:0">Data file: <b>${window.store.path}</b><br>Daily backups are kept for 30 days in the Backup folder.</p></div>
+<h3>Automatic backups (last 30 days)</h3><div class="card tw"><table>${bkList().map(k=>`<tr><td>${k.slice(BK.length)}</td><td><button class="btn o" onclick="restoreBk('${k}')">Restore</button></td></tr>`).join('')||'<tr><td>No backups yet. One is made on the first visit each day.</td></tr>'}</table></div>
+<h3>Manual backup & restore</h3><div class="card"><p style="margin-top:0;color:var(--mu)">Data is stored in this browser. Copy the backup text into a file on your D: drive, or paste it here to restore.</p>
+<textarea id="bk" rows="5" style="width:100%"></textarea><div class="row" style="margin-top:8px"><button class="btn" onclick="$('#bk').value=JSON.stringify(D)">Create backup</button><button class="btn o" onclick="restore()">Restore from text</button><button class="btn r" onclick="if(confirm('Erase all data and reset demo data?')){D=seed();save();go()}">Reset</button></div></div>`},
+Database(){
+const counts={products:D.prods.length,customers:D.custs.length,bills:D.bills.length,purchases:D.purch.length,stock:D.mv.length,expenses:D.exp.length,closings:Object.keys(D.close||{}).length,audit:D.audit.length,settings:Object.keys(D.set||{}).length};
+const tbls=[['products','public.products'],['customers','public.customers'],['bills','public.bills'],['purchases','public.purchases'],['stock','public.stock_movements'],['expenses','public.expenses'],['closings','public.daily_closings'],['audit','public.audit_logs'],['settings','public.app_settings']];
+return`<div class="db-sharp">
+<div class="db-toolbar">
+  <div style="display:flex;align-items:center;gap:10px;flex-wrap:wrap">
+    <span style="font-weight:700;font-size:12px;letter-spacing:1px;color:#f8fafc">DATABASE EXPLORER</span>
+    <span style="color:#64748b">/</span>
+    <span style="font-size:12px;color:#94a3b8">schema: <b style="color:#f8fafc">public</b></span>
+    <span class="tag" style="background:#1e293b;color:#38bdf8;border:1px solid #0284c7" id="db-mode-tag">DIRECT DB REPLICA</span>
+  </div>
+  <div style="display:flex;gap:6px">
+    <button class="btn o" style="background:#0f172a;color:#f8fafc;border:1px solid #475569" onclick="syncDbData()">REFRESH QUERY</button>
+    <button class="btn o" style="background:#0f172a;color:#f8fafc;border:1px solid #475569" onclick="exportDbCsv()">EXPORT CSV</button>
+    <button class="btn" style="background:#2563eb;color:#fff;border:1px solid #1d4ed8" onclick="exportDbJson()">EXPORT JSON</button>
+  </div>
+</div>
+<div class="db-tab-bar">
+  ${tbls.map(([k,lbl])=>`<button class="db-tab-btn ${dbTab===k?'active':''}" onclick="setDbTab('${k}')"><span>${lbl}</span><span class="db-tab-count">${counts[k]||0}</span></button>`).join('')}
+</div>
+<div class="db-filter-bar">
+  <span style="font-weight:700;font-size:11px;color:#64748b">FILTER (WHERE):</span>
+  <input placeholder="Filter records in public.${dbTab}... (case-insensitive text search)" value="${dbSearch}" oninput="dbSearch=this.value.trim().toLowerCase();renderDbTable()" style="flex:1;padding:5px 8px;font-size:12px">
+  <button class="btn o" style="padding:4px 8px;font-size:10px" onclick="dbSearch='';renderDbTable();go()">CLEAR</button>
+</div>
+<div class="card tw" id="dbtb" style="border-top:none !important"></div>
+<div id="db-status-bar"></div>
+</div>`}};
+function bl(){const e=$('#bl');if(!e)return;e.innerHTML=`<table><tr><th>Bill</th><th>Date</th><th class="n">Total</th><th></th></tr>${D.bills.filter(b=>b.no.toLowerCase().includes(q.toLowerCase())).slice(0,30).map(b=>`<tr><td>${b.no}${b.ret?' <span class="tag">returned</span>':''}</td><td>${new Date(b.t).toLocaleString('en-IN')}</td><td class="n">${R(b.total)}</td><td><button class="btn o" onclick="rcpt(D.bills.find(x=>x.no=='${b.no}'))">Reprint</button> ${b.ret?'':`<button class="btn r" onclick="retBill('${b.no}')">Return</button>`}</td></tr>`).join('')||'<tr><td>No bills</td></tr>'}</table>`}
+function sugg(){const v=$('#sq').value.trim().toLowerCase(),e=$('#sg');if(!v){e.style.display='none';return}
+const m=D.prods.filter(p=>(p.name+p.bc+p.code).toLowerCase().includes(v)).slice(0,6);e.style.display='block';
+e.innerHTML='<table>'+(m.map(p=>`<tr style="cursor:pointer" onclick="add(${p.id})"><td>${p.name}</td><td class="n">${R(p.sp)}</td><td class="n">${p.stock} in stock</td></tr>`).join('')||'<tr><td>No match</td></tr>')+'</table>'}
+function addQ(){const v=$('#sq').value.trim(),p=D.prods.find(p=>p.bc==v||p.code==v)||D.prods.find(p=>p.name.toLowerCase().includes(v.toLowerCase()));if(p)add(p.id)}
+function add(id){const l=cart.find(c=>c.id==id);if(l)l.qty++;else cart.push({id,qty:1});go();$('#sq').focus()}
+function calc(){const ct=$('#ct');if(!ct)return;const rows=cart.map(l=>{const p=P(l.id),m=mult(l),up=p.sp*m,ln=l.qty*up;return{l,p,m,up,ln,g:ln*p.gst/100}});
+ct.innerHTML='<tr><th>Product</th><th class="n">Qty</th><th>Unit</th><th class="n">Price</th><th class="n">GST</th><th class="n">Total</th><th></th></tr>'+(rows.map(r=>`<tr><td>${r.p.name}</td><td class="n"><input type="number" min="1" value="${r.l.qty}" style="width:64px" onchange="cart.find(c=>c.id==${r.p.id}).qty=Math.max(1,+this.value||1);calc()"></td><td>${r.p.box?`<select onchange="cart.find(c=>c.id==${r.p.id}).u=this.value;calc()"><option value="pc">${r.p.unit}</option><option value="box" ${r.l.u=='box'?'selected':''}>box (${r.p.box})</option></select>`:r.p.unit}</td><td class="n">${R(r.up)}</td><td class="n">${R(r.g)}</td><td class="n">${R(r.ln+r.g)}</td><td><button class="btn r" onclick="cart=cart.filter(c=>c.id!=${r.p.id});go()">✕</button></td></tr>`).join('')||'<tr><td colspan="7">Scan or search to add items</td></tr>');
+const sub=sum(rows,r=>r.ln),d=Math.min(disc,sub),f=sub?(sub-d)/sub:0,gst=sum(rows,r=>r.g)*f,tot=Math.round(sub-d+gst);
+T={sub,d,gst,tot,rows};$('#sm').innerHTML=`Subtotal ${R(sub)}<br>Discount ${R(d)}<br>GST ${R(gst)}<div class="tot">Total ${R(tot)}</div>`;
+const paid=['cash','upi','card','credit'].reduce((a,m)=>a+(+$('#p_'+m).value||0),0);
+$('#pm').textContent=paid==0?'Enter payment amounts. Leave empty to take full amount in cash.':paid>=tot?`Paid ${R(paid)}. Change ${R(paid-tot)}`:`Paid ${R(paid)}. Balance ${R(tot-paid)}`}
+let T={};
+function pay(){calc();if(!cart.length)return alert('Add at least one item.');
+const pm={};['cash','upi','card','credit'].forEach(m=>pm[m]=+$('#p_'+m).value||0);let paid=sum(Object.values(pm),x=>x);
+if(!paid)pm.cash=T.tot,paid=T.tot;if(paid<T.tot)return alert('Payment is short by '+R(T.tot-paid));if(paid>T.tot)pm.cash=Math.max(0,pm.cash-(paid-T.tot));
+const bad=T.rows.find(r=>r.l.qty*r.m>r.p.stock);if(bad&&!confirm(bad.p.name+' has only '+bad.p.stock+' in stock. Continue?'))return;
+const no=D.set.pre+String(D.bills.length+1).padStart(6,'0');
+const b={no,t:new Date().toISOString(),cust,items:T.rows.map(r=>({id:r.p.id,name:r.p.name,qty:r.l.qty,unit:r.l.u=='box'?'box':r.p.unit,mult:r.m,price:r.up,gst:r.p.gst})),sub:T.sub,disc:T.d,gst:T.gst,total:T.tot,pay:pm,cashier:'Admin'};
+D.bills.unshift(b);T.rows.forEach(r=>{const n=r.l.qty*r.m;r.p.stock-=n;mv(r.p.id,-n,'Sale '+no)});
+if(pm.credit){const c=D.custs.find(c=>c.id==cust);c.bal+=pm.credit}
+if(T.d)log('Discount',no+' '+R(T.d));cart=[];disc=0;save();go();if(D.set.auto)rcpt(b)}
+function rcpt(b){const w=D.set.w==58?32:48,line='-'.repeat(w),c=(s)=>' '.repeat(Math.max(0,(w-s.length)>>1))+s,lr=(a,z)=>a+' '.repeat(Math.max(1,w-a.length-z.length))+z;
+const c0=D.custs.find(c=>c.id==b.cust);
+let t=[c(D.set.shop),c(D.set.addr),c('Ph: '+D.set.phone)];if(D.set.gstin)t.push(c('GSTIN: '+D.set.gstin));
+t.push(line,'Bill No: '+b.no,'Date: '+new Date(b.t).toLocaleString('en-IN'),'Cashier: '+b.cashier+(c0&&c0.id!=1?' | '+c0.name:''),line,lr('Item x Qty','Amount'));
+b.items.forEach(i=>{t.push(i.name.slice(0,w));t.push(lr('  '+i.qty+' '+(i.unit||'')+' x '+i.price,(i.qty*i.price).toFixed(2)))});
+t.push(line,lr('Subtotal',b.sub.toFixed(2)),lr('Discount',b.disc.toFixed(2)),lr('GST',b.gst.toFixed(2)),lr('TOTAL','Rs '+b.total),line,'Payment: '+Object.entries(b.pay).filter(x=>x[1]).map(x=>x[0].toUpperCase()+' '+x[1]).join(', '),'',c('Thank you!'),c('Visit again'),'','');
+const r=$('#rc');r.style.width=D.set.w+'mm';r.textContent=t.join('\n');setTimeout(()=>window.store.print(),50)}
+const testBill=()=>({no:'TEST-0001',t:new Date().toISOString(),cust:1,items:[{name:'Test item',qty:2,price:100}],sub:200,disc:0,gst:10,total:210,pay:{cash:210},cashier:'Admin'});
+function retBill(no){if(!confirm('Return bill '+no+' and restore stock?'))return;const b=D.bills.find(x=>x.no==no);b.ret=1;b.retT=new Date().toISOString();b.items.forEach(i=>{const p=P(i.id),n=i.qty*(i.mult||1);if(p){p.stock+=n;mv(p.id,n,'Return '+no)}});if(b.pay.credit){const c=D.custs.find(c=>c.id==b.cust);if(c)c.bal-=b.pay.credit}log('Refund',no+' '+R(b.total));save();go()}
+function addProd(){const g=k=>$('#n_'+k).value.trim();if(!g('name')||!g('sp'))return alert('Enter a name and selling price.');
+D.prods.push({id:Date.now(),name:g('name'),code:g('code'),bc:g('bc'),cat:g('cat')||'General',unit:g('unit')||'pc',pp:+g('pp')||0,sp:+g('sp'),mrp:+g('mrp')||+g('sp'),gst:+g('gst')||0,stock:+g('stock')||0,min:+g('min')||0,box:+g('box')||0});save();go()}
+function delProd(id){if(!confirm('Delete this product?'))return;const p=P(id);D.prods=D.prods.filter(p=>p.id!=id);log('Product deleted',p.name);save();go()}
+function addPur(){const p=P($('#u_p').value),q=+$('#u_q').value,pr=+$('#u_pr').value,m=$('#u_u').value=='box'?(p.box||1):1;if(!q||!$('#u_s').value)return alert('Enter supplier and quantity.');
+const tot=q*m*(pr||p.pp)*(1+p.gst/100);D.purch.unshift({t:new Date().toISOString(),s:$('#u_s').value,i:$('#u_i').value,n:p.name,q:q*m,tot,st:$('#u_st').value});p.stock+=q*m;if(pr)p.pp=pr;mv(p.id,q*m,'Purchase');save();go()}
+function adj(id){const v=+$('#a'+id).value;if(!v)return;P(id).stock+=v;mv(id,v,'Adjustment');log('Stock adjusted',P(id).name+' '+v);save();go()}
+function addCust(){const n=$('#c_n').value.trim();if(!n)return;D.custs.push({id:Date.now(),name:n,mobile:$('#c_m').value,bal:0});save();go()}
+function settle(id){const c=D.custs.find(c=>c.id==id),a=+prompt('Amount received (outstanding '+R(c.bal)+')');if(a>0){c.bal=Math.max(0,c.bal-a);save();go()}}
+function addExp(){const a=+$('#e_a').value;if(!a)return;D.exp.unshift({t:new Date().toISOString(),cat:$('#e_c').value,amt:a});save();go()}
+function saveSet(){const s=D.set;['shop','addr','phone','gstin','pre'].forEach(k=>s[k]=$('#s_'+k).value);s.w=+$('#s_w').value;s.auto=$('#s_auto').value=='1';s.autobk=$('#s_ab').value=='1';save();go()}
+function clc(){const o=+$('#c_o').value||0,c=$('#c_c').value,e=o+CL.cash-CL.cr-CL.xp;$('#cl').innerHTML=`Expected cash in drawer: <b>${R(e)}</b><br><small>opening + cash sales − cash refunds − expenses</small>`+(c===''?'':`<br>Difference: <b class="${c-e<0?'low':''}">${R(c-e)}</b> ${c-e==0?'(matches)':c-e<0?'(short)':'(excess)'}`)}
+function saveClose(){const c=$('#c_c').value;D.close[cday]={open:+$('#c_o').value||0,cnt:c===''?null:+c};log('Day closed',cday);save();alert('Closing saved for '+cday)}
+function printClose(){const w=D.set.w==58?32:48,line='-'.repeat(w),lr=(a,z)=>a+' '.repeat(Math.max(1,w-a.length-z.length))+z,o=+$('#c_o').value||0,c=$('#c_c').value,e=o+CL.cash-CL.cr-CL.xp,f=x=>x.toFixed(2);
+const t=[D.set.shop,'DAILY CLOSING '+cday,line,lr('Bills',''+CL.n),lr('Sales',f(CL.sales)),lr('Refunds',f(CL.ref)),lr('Cash',f(CL.cash)),lr('UPI',f(CL.upi)),lr('Card',f(CL.card)),lr('Credit',f(CL.credit)),lr('Expenses',f(CL.xp)),line,lr('Opening cash',f(o)),lr('Expected cash',f(e)),lr('Counted',c===''?'-':f(+c)),lr('Difference',c===''?'-':f(c-e)),'',''];
+const r=$('#rc');r.style.width=D.set.w+'mm';r.textContent=t.join('\n');setTimeout(()=>window.store.print(),50)}
+function restoreBk(k){if(!confirm('Restore backup from '+k.slice(BK.length)+'? Current data will be replaced.'))return;try{D=JSON.parse(window.store.read(k));D.close=D.close||{};window.store.save(JSON.stringify(D));go()}catch(e){alert('Could not restore that backup.')}}
+function restore(){try{D=JSON.parse($('#bk').value);save();go()}catch(e){alert('That backup text could not be read.')}}
+function updateDbBadge(){fetch('/api/info').then(r=>r.json()).then(i=>{const b=$('#db-badge');if(!b)return;if(i.database==='Supabase'){b.innerHTML='<span style="display:inline-block;width:7px;height:7px;background:#34d399;border-radius:50%;margin-right:6px"></span>CONNECTED: SUPABASE (POSTGRESQL)';b.style.background='#064e3b';b.style.border='1px solid #059669';b.style.color='#ecfdf5'}else{b.innerHTML='<span style="display:inline-block;width:7px;height:7px;background:#94a3b8;border-radius:50%;margin-right:6px"></span>CONNECTED: SQLITE (LOCAL)';b.style.background='#1e293b';b.style.border='1px solid #475569';b.style.color='#f1f5f9'}if(i.url&&$('#sb_url'))$('#sb_url').value=i.url}).catch(()=>{const b=$('#db-badge');if(b){b.textContent='LOCAL CACHE';b.style.background='#1e293b'}})}
+function saveSupabase(){const url=$('#sb_url').value.trim(),key=$('#sb_key').value.trim();if(!url||!key)return alert('Please enter both Supabase Project URL and Anon Key.');fetch('/api/set-supabase',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({url,key})}).then(r=>r.json()).then(res=>{if(res.success){alert('Connected to Supabase! Reloading...');location.reload()}else alert(res.error||'Failed to connect')}).catch(e=>alert('Error: '+e.message))}
+let dbTab='products',dbSearch='';
+function setDbTab(t){dbTab=t;go()}
+function syncDbData(){fetch('/api/load').then(r=>r.json()).then(data=>{if(data&&data.prods){D=data;save();go();alert('Database synced and refreshed successfully!')}}).catch(e=>alert('Sync error: '+e.message))}
+function exportDbJson(){const blob=new Blob([JSON.stringify(D,null,2)],{type:'application/json'});const a=document.createElement('a');a.href=URL.createObjectURL(blob);a.download=`database_backup_${new Date().toISOString().slice(0,10)}.json`;a.click()}
+function exportDbCsv(){let rows=[],headers=[];if(dbTab==='products'){headers=['id','name','code','bc','cat','unit','pp','sp','mrp','gst','stock','min','box'];rows=D.prods}else if(dbTab==='customers'){headers=['id','name','mobile','bal'];rows=D.custs}else if(dbTab==='bills'){headers=['no','t','cust','sub','disc','gst','total','cashier','ret'];rows=D.bills}else if(dbTab==='purchases'){headers=['t','s','i','n','q','tot','st'];rows=D.purch}else if(dbTab==='stock'){headers=['t','pid','qty','why'];rows=D.mv}else if(dbTab==='expenses'){headers=['t','cat','amt'];rows=D.exp}else if(dbTab==='closings'){headers=['date','opening','counted'];rows=Object.entries(D.close||{}).map(([k,v])=>({date:k,opening:v.open,counted:v.cnt}))}else if(dbTab==='audit'){headers=['t','a','d'];rows=D.audit}else if(dbTab==='settings'){headers=['key','value'];rows=Object.entries(D.set||{}).map(([k,v])=>({key:k,value:typeof v==='object'?JSON.stringify(v):String(v)}))}if(!rows.length)return alert('No records to export in this table.');const csv=[headers.join(',')].concat(rows.map(r=>headers.map(h=>JSON.stringify(r[h]??'')).join(','))).join('\n');const blob=new Blob([csv],{type:'text/csv'});const a=document.createElement('a');a.href=URL.createObjectURL(blob);a.download=`public_${dbTab}_${new Date().toISOString().slice(0,10)}.csv`;a.click()}
+function renderDbTable(){const el=$('#dbtb');if(!el)return;const q=dbSearch;
+const th=(col,type,cls='')=>`<th class="${cls}"><div class="th-name">${col}</div><div class="th-type">${type}</div></th>`;
+const rowNum=i=>`<td class="row-num">${i+1}</td>`;
+const nil=v=>(v===null||v===undefined||v==='')?`<span style="color:#94a3b8;font-style:italic">null</span>`:v;
+const dbDate=t=>{try{return new Date(t).toISOString().replace('T',' ').slice(0,19)}catch(e){return t}};
+let html='',shown=0,total=0;
+if(dbTab==='products'){total=D.prods.length;const list=D.prods.filter(p=>!q||(p.name+p.code+p.bc+p.cat).toLowerCase().includes(q));shown=list.length;
+html=`<table><tr>`+th('#','row')+th('id','int8 PK')+th('name','text')+th('code','varchar(50)')+th('barcode','varchar(50)')+th('category','varchar(100)')+th('unit','varchar(20)')+th('purchase_price','numeric(12,2)','n')+th('selling_price','numeric(12,2)','n')+th('mrp','numeric(12,2)','n')+th('gst_rate','numeric(5,2)','n')+th('current_stock','numeric(12,2)','n')+th('min_stock','numeric(12,2)','n')+th('pieces_per_box','int4','n')+`</tr>`+(list.map((p,i)=>`<tr>`+rowNum(i)+`<td><code>${p.id}</code></td><td><b>${p.name}</b></td><td>${nil(p.code)}</td><td><code>${nil(p.bc)}</code></td><td><span class="tag" style="background:#f1f5f9;color:#334155;border:1px solid #cbd5e1">${p.cat||'General'}</span></td><td>${p.unit||'pc'}</td><td class="n">${(+p.pp||0).toFixed(2)}</td><td class="n" style="font-weight:700">${(+p.sp||0).toFixed(2)}</td><td class="n">${(+p.mrp||0).toFixed(2)}</td><td class="n">${p.gst}%</td><td class="n ${p.stock<=p.min?'low':''}"><b>${p.stock}</b></td><td class="n">${p.min}</td><td class="n">${p.box||1}</td></tr>`).join('')||`<tr><td colspan="14" style="text-align:center;padding:18px;color:#94a3b8">0 rows returned (no matching records)</td></tr>`)+`</table>`}
+else if(dbTab==='customers'){total=D.custs.length;const list=D.custs.filter(c=>!q||(c.name+c.mobile).toLowerCase().includes(q));shown=list.length;
+html=`<table><tr>`+th('#','row')+th('id','int8 PK')+th('name','varchar(150)')+th('mobile','varchar(20)')+th('outstanding_balance','numeric(12,2)','n')+th('total_bills','int4','n')+`</tr>`+(list.map((c,i)=>`<tr>`+rowNum(i)+`<td><code>${c.id}</code></td><td><b>${c.name}</b></td><td>${nil(c.mobile)}</td><td class="n ${c.bal>0?'low':''}"><b>${(+c.bal||0).toFixed(2)}</b></td><td class="n">${live().filter(b=>b.cust==c.id).length}</td></tr>`).join('')||`<tr><td colspan="6" style="text-align:center;padding:18px;color:#94a3b8">0 rows returned (no matching records)</td></tr>`)+`</table>`}
+else if(dbTab==='bills'){total=D.bills.length;const list=D.bills.filter(b=>!q||(b.no+(b.cashier||'')).toLowerCase().includes(q));shown=list.length;
+html=`<table><tr>`+th('#','row')+th('invoice_no','varchar(50) PK')+th('created_at','timestamptz')+th('customer_name','text')+th('subtotal','numeric(12,2)','n')+th('discount','numeric(12,2)','n')+th('gst_total','numeric(12,2)','n')+th('total_amount','numeric(12,2)','n')+th('payment_splits','jsonb')+th('item_count','int4','n')+th('cashier','varchar(100)')+th('status','varchar(20)')+`</tr>`+(list.map((b,i)=>{const pm=Object.entries(b.pay||{}).filter(x=>x[1]).map(x=>`${x[0]}:${x[1]}`).join(', ');const cName=D.custs.find(c=>c.id==b.cust)?.name||'Walk-in';return `<tr>`+rowNum(i)+`<td><b>${b.no}</b></td><td>${dbDate(b.t)}</td><td>${cName}</td><td class="n">${(+b.sub||0).toFixed(2)}</td><td class="n">${(+b.disc||0).toFixed(2)}</td><td class="n">${(+b.gst||0).toFixed(2)}</td><td class="n" style="font-weight:700">${(+b.total||0).toFixed(2)}</td><td><code>{${pm||'cash'}}</code></td><td class="n">${b.items?b.items.length:0}</td><td>${b.cashier||'Admin'}</td><td>${b.ret?'<span class="tag" style="background:#fee2e2;color:#991b1b;border:1px solid #f87171">RETURNED</span>':'<span class="tag" style="background:#f1f5f9;color:#0f172a;border:1px solid #cbd5e1">COMPLETED</span>'}</td></tr>`}).join('')||`<tr><td colspan="12" style="text-align:center;padding:18px;color:#94a3b8">0 rows returned (no matching records)</td></tr>`)+`</table>`}
+else if(dbTab==='purchases'){total=D.purch.length;const list=D.purch.filter(p=>!q||(p.s+p.i+p.n).toLowerCase().includes(q));shown=list.length;
+html=`<table><tr>`+th('#','row')+th('created_at','timestamptz')+th('supplier_name','varchar(150)')+th('invoice_no','varchar(50)')+th('product_name','text')+th('quantity','numeric(12,2)','n')+th('total_amount','numeric(12,2)','n')+th('payment_status','varchar(20)')+`</tr>`+(list.map((x,i)=>`<tr>`+rowNum(i)+`<td>${dbDate(x.t)}</td><td><b>${x.s}</b></td><td>${nil(x.i)}</td><td>${x.n}</td><td class="n">${x.q}</td><td class="n" style="font-weight:700">${(+x.tot||0).toFixed(2)}</td><td><span class="tag" style="background:#f1f5f9;color:#0f172a;border:1px solid #cbd5e1">${(x.st||'Paid').toUpperCase()}</span></td></tr>`).join('')||`<tr><td colspan="8" style="text-align:center;padding:18px;color:#94a3b8">0 rows returned (no matching records)</td></tr>`)+`</table>`}
+else if(dbTab==='stock'){total=D.mv.length;const list=D.mv.filter(m=>!q||((P(m.pid)?.name||'')+m.why).toLowerCase().includes(q));shown=list.length;
+html=`<table><tr>`+th('#','row')+th('created_at','timestamptz')+th('product_id','int8 FK')+th('product_name','text')+th('quantity_delta','numeric(12,2)','n')+th('reason','varchar(100)')+`</tr>`+(list.map((m,i)=>`<tr>`+rowNum(i)+`<td>${dbDate(m.t)}</td><td><code>${m.pid}</code></td><td><b>${P(m.pid)?.name||'Product #'+m.pid}</b></td><td class="n ${m.qty<0?'low':''}"><b>${m.qty>0?'+':''}${m.qty}</b></td><td>${m.why}</td></tr>`).join('')||`<tr><td colspan="6" style="text-align:center;padding:18px;color:#94a3b8">0 rows returned (no matching records)</td></tr>`)+`</table>`}
+else if(dbTab==='expenses'){total=D.exp.length;const list=D.exp.filter(e=>!q||e.cat.toLowerCase().includes(q));shown=list.length;
+html=`<table><tr>`+th('#','row')+th('created_at','timestamptz')+th('category','varchar(100)')+th('amount','numeric(12,2)','n')+`</tr>`+(list.map((e,i)=>`<tr>`+rowNum(i)+`<td>${dbDate(e.t)}</td><td><span class="tag" style="background:#f1f5f9;color:#0f172a;border:1px solid #cbd5e1">${e.cat.toUpperCase()}</span></td><td class="n" style="font-weight:700">${(+e.amt||0).toFixed(2)}</td></tr>`).join('')||`<tr><td colspan="4" style="text-align:center;padding:18px;color:#94a3b8">0 rows returned (no matching records)</td></tr>`)+`</table>`}
+else if(dbTab==='closings'){const entries=Object.entries(D.close||{}).filter(([day])=>!q||day.includes(q)).sort().reverse();total=Object.keys(D.close||{}).length;shown=entries.length;
+html=`<table><tr>`+th('#','row')+th('closing_date','date PK')+th('opening_cash','numeric(12,2)','n')+th('counted_cash','numeric(12,2)','n')+th('cash_difference','numeric(12,2)','n')+`</tr>`+(entries.map(([day,c],i)=>`<tr>`+rowNum(i)+`<td><b>${day}</b></td><td class="n">${(+c.open||0).toFixed(2)}</td><td class="n">${c.cnt!==null?(+c.cnt).toFixed(2):nil(null)}</td><td class="n">${c.cnt!==null?(+c.cnt-(+c.open||0)).toFixed(2):nil(null)}</td></tr>`).join('')||`<tr><td colspan="5" style="text-align:center;padding:18px;color:#94a3b8">0 rows returned (no matching records)</td></tr>`)+`</table>`}
+else if(dbTab==='audit'){total=D.audit.length;const list=D.audit.filter(a=>!q||(a.a+a.d).toLowerCase().includes(q));shown=list.length;
+html=`<table><tr>`+th('#','row')+th('created_at','timestamptz')+th('action','varchar(100)')+th('details','text')+`</tr>`+(list.map((a,i)=>`<tr>`+rowNum(i)+`<td>${dbDate(a.t)}</td><td><span class="tag" style="background:#f1f5f9;color:#0f172a;border:1px solid #cbd5e1">${a.a.toUpperCase()}</span></td><td>${a.d}</td></tr>`).join('')||`<tr><td colspan="4" style="text-align:center;padding:18px;color:#94a3b8">0 rows returned (no matching records)</td></tr>`)+`</table>`}
+else if(dbTab==='settings'){const entries=Object.entries(D.set||{}).filter(([k])=>!q||k.toLowerCase().includes(q));total=Object.keys(D.set||{}).length;shown=entries.length;
+html=`<table><tr>`+th('#','row')+th('config_key','varchar(100) PK')+th('config_value','jsonb')+`</tr>`+(entries.map(([k,v],i)=>`<tr>`+rowNum(i)+`<td><code>${k}</code></td><td><code>${typeof v==='object'?JSON.stringify(v):String(v)}</code></td></tr>`).join('')||`<tr><td colspan="3" style="text-align:center;padding:18px;color:#94a3b8">0 rows returned</td></tr>`)+`</table>`}
+el.innerHTML=html;
+const sb=$('#db-status-bar');
+if(sb)sb.innerHTML=`<div class="db-statusbar"><div><span>Table: <b>public.${dbTab}</b></span> &nbsp;|&nbsp; <span>Displaying <b>${shown}</b> of <b>${total}</b> rows</span></div><div>Engine: PostgreSQL/SQLite Frontend Sync &nbsp;|&nbsp; Encoding: UTF-8 &nbsp;|&nbsp; Status: OK</div></div>`}
+autoBackup();setInterval(autoBackup,3600000);go();updateDbBadge();
+</script></body></html>
