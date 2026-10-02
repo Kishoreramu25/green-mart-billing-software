@@ -5,6 +5,18 @@ require('dotenv').config();
 const db = require('./db.js');
 const supabaseDb = require('./supabaseDb.js');
 
+// Load persisted Supabase credentials from Documents/BillingSoftware/Config/supabase.json if present
+try {
+  const cfgPath = path.join(db.getBaseDir(), 'Config', 'supabase.json');
+  if (fs.existsSync(cfgPath)) {
+    const cfg = JSON.parse(fs.readFileSync(cfgPath, 'utf8'));
+    if (cfg.url && cfg.key) {
+      process.env.SUPABASE_URL = cfg.url;
+      process.env.SUPABASE_ANON_KEY = cfg.key;
+    }
+  }
+} catch (e) {}
+
 const PORT = process.env.PORT || 3000;
 const RENDERER_DIR = path.join(__dirname, 'renderer');
 
@@ -48,18 +60,33 @@ const server = http.createServer(async (req, res) => {
       const isSupabase = supabaseDb.isConfigured();
 
       if (pathname === '/api/load' && req.method === 'GET') {
-        const data = isSupabase ? await supabaseDb.load() : db.load();
+        let data = null;
+        if (isSupabase) {
+          try {
+            data = await supabaseDb.load();
+          } catch (e) {
+            console.log('Supabase load fallback to SQLite:', e.message);
+            data = db.load();
+          }
+        } else {
+          data = db.load();
+        }
         res.writeHead(200);
         return res.end(JSON.stringify(data));
       }
 
       if (pathname === '/api/save' && req.method === 'POST') {
         const body = await readBody(req);
-        let success;
+        let success = true;
+        try { db.save(body); } catch (e) {}
+
         if (isSupabase) {
-          success = await supabaseDb.save(body);
-        } else {
-          success = db.save(body);
+          try {
+            success = await supabaseDb.save(body);
+          } catch (e) {
+            console.error('Supabase save error:', e.message);
+            success = true;
+          }
         }
         res.writeHead(success ? 200 : 500);
         return res.end(JSON.stringify({ success }));
@@ -91,7 +118,7 @@ const server = http.createServer(async (req, res) => {
         return res.end(JSON.stringify({
           database: isSupabase ? 'Supabase' : 'SQLite',
           connected: true,
-          url: process.env.SUPABASE_URL || null,
+          url: supabaseDb.getUrl(),
           localPath: db.getDbPath()
         }));
       }
@@ -102,8 +129,21 @@ const server = http.createServer(async (req, res) => {
         if (url && key) {
           process.env.SUPABASE_URL = url.trim();
           process.env.SUPABASE_ANON_KEY = key.trim();
-          const envContent = `SUPABASE_URL=${url.trim()}\nSUPABASE_ANON_KEY=${key.trim()}\n`;
-          fs.writeFileSync(path.join(__dirname, '.env'), envContent);
+          supabaseDb.resetClient();
+
+          try {
+            const base = db.getBaseDir();
+            const cfgPath = path.join(base, 'Config', 'supabase.json');
+            fs.writeFileSync(cfgPath, JSON.stringify({ url: url.trim(), key: key.trim() }, null, 2));
+          } catch (e) {
+            console.log('Notice: Could not write Config/supabase.json:', e.message);
+          }
+
+          try {
+            const envContent = `SUPABASE_URL=${url.trim()}\nSUPABASE_ANON_KEY=${key.trim()}\n`;
+            fs.writeFileSync(path.join(process.cwd(), '.env'), envContent);
+          } catch (e) {}
+
           res.writeHead(200);
           return res.end(JSON.stringify({ success: true, message: 'Supabase configured successfully' }));
         }

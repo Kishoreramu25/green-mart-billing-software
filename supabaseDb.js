@@ -1,13 +1,24 @@
 const { createClient } = require('@supabase/supabase-js');
 require('dotenv').config();
 
+const DEFAULT_URL = 'https://rcuovsfyhkxwodcfpdpw.supabase.co';
+const DEFAULT_KEY = 'sb_publishable_lMtAFOg6KnOCCg8Jz50kTQ_-tahMlCG';
+
 let supabase = null;
 
+function getUrl() {
+  return process.env.SUPABASE_URL || DEFAULT_URL;
+}
+
+function getKey() {
+  return process.env.SUPABASE_ANON_KEY || DEFAULT_KEY;
+}
+
 function getClient() {
-  const url = process.env.SUPABASE_URL || '';
-  const key = process.env.SUPABASE_ANON_KEY || '';
+  const url = getUrl();
+  const key = getKey();
   if (url && key) {
-    if (!supabase) {
+    if (!supabase || supabase.supabaseUrl !== url) {
       supabase = createClient(url, key, { auth: { persistSession: false } });
     }
     return supabase;
@@ -276,7 +287,10 @@ module.exports = {
   load,
   save,
   getClient,
+  getUrl,
+  getKey,
+  resetClient: () => { supabase = null; },
   isConfigured: () => {
-    return !!(process.env.SUPABASE_URL && process.env.SUPABASE_ANON_KEY);
+    return !!(getUrl() && getKey());
   }
 };
